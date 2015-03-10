@@ -24,6 +24,11 @@ directory '/etc/opscode' do
   recursive true
 end
 
+execute "chef-server-restart" do
+  command 'chef-server-ctl restart'
+  action :nothing
+end
+
 # create the initial chef-server config file
 template '/etc/opscode/chef-server.rb' do
   source 'chef-server.rb.erb'
@@ -31,6 +36,7 @@ template '/etc/opscode/chef-server.rb' do
   group 'root'
   action :create
   notifies :reconfigure, 'chef_server_ingredient[chef-server-core]'
+  notifies :run, 'execute[chef-server-restart]'
 end
 
 ruby_block 'ensure node can resolve API FQDN' do
