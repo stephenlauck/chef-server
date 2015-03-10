@@ -9,14 +9,49 @@ provisioner:
 
 platforms:
 - name: ubuntu-10.04
+  run_list:
+    - recipe[test::apt]
 - name: ubuntu-12.04
+  run_list:
+    - recipe[test::apt]
 - name: ubuntu-14.04
+  run_list:
+    - recipe[test::apt]
 - name: centos-6.6
 - name: centos-5.10
 - name: centos-5.11
 
 suites:
-- name: default
+- name: standalone
+  run_list:
+  - recipe[chef-server]
+  - recipe[chef-server::add_ons]
+  - recipe[test::user_and_org]
+  driver:
+    network:
+      - ['private_network', {ip: '33.33.33.10'}]
+  attributes:
+    chef-server:
+      api_fqdn: ''
+      add_ons:
+        - opscode-manage
+        - opscode-reporting
+        - opscode-push-jobs-server
+
+- name: analytics
+  run_list:
+  - recipe[chef-server]
+  - recipe[chef-server::add_ons]
+  driver:
+    network:
+      - ['private_network', {ip: '33.33.33.11'}]
+  attributes:
+    chef-server:
+      api_fqdn: ''
+      add_ons:
+        - opscode-analytics
+
+- name: fqdn
   run_list:
   - recipe[test]
   - recipe[chef-server]
@@ -32,22 +67,7 @@ suites:
   - recipe[chef-server::add_ons]
   driver:
     network:
-      - ['private_network', {ip: '192.168.243.2'}]
+      - ['private_network', {ip: '33.33.33.12'}]
   attributes:
     chef-server:
       api_fqdn: ''
-
-- name: add-ons-no-fqdn
-  run_list:
-  - recipe[test]
-  - recipe[chef-server]
-  - recipe[chef-server::add_ons]
-  driver:
-    network:
-      - ['private_network', {ip: '192.168.243.3'}]
-  attributes:
-    chef-server:
-      api_fqdn: ''
-      add_ons:
-        - opscode-manage
-        - opscode-reporting
