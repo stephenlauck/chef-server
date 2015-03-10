@@ -51,3 +51,6 @@ default['chef-server']['add_ons'] = %w{ opscode-manage }
 #     )
 #
 default['chef-server']['configuration'] = {}
+
+
+default['chef-server']['analytics']['fqdn'] = node['fqdn']
