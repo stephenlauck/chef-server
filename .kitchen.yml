@@ -12,36 +12,18 @@ platforms:
 - name: centos-6.6
 
 suites:
-- name: default
+- name: standalone
   run_list:
-  - recipe[test]
-  - recipe[chef-server]
-  - recipe[test::post-install]
-  attributes:
-    chef-server:
-      api_fqdn: 'chef-server-tk.example.com'
-
-- name: no-fqdn
-  run_list:
-  - recipe[test]
-  - recipe[chef-server]
+    - recipe[test::hostsfile]
+    - recipe[chef-server]
+    - recipe[chef-server::addons]
   driver:
+    vm_hostname: chef.example.com
     network:
-      - ['private_network', {ip: '192.168.243.2'}]
+      - ['private_network', {ip: '33.33.33.10'}]
   attributes:
     chef-server:
-      api_fqdn: ''
-
-- name: add-ons-no-fqdn
-  run_list:
-  - recipe[test]
-  - recipe[chef-server]
-  - recipe[chef-server::addons]
-  driver:
-    network:
-      - ['private_network', {ip: '192.168.243.3'}]
-  attributes:
-    chef-server:
-      api_fqdn: ''
+      api_fqdn: 'chef.example.com'
       addons:
         - opscode-manage
+
