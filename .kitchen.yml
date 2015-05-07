@@ -17,6 +17,7 @@ suites:
     - recipe[test::hostsfile]
     - recipe[chef-server]
     - recipe[chef-server::addons]
+    - recipe[test::user_and_org]
   driver:
     vm_hostname: chef.example.com
     network:
