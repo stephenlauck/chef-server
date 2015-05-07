@@ -41,15 +41,3 @@ directory '/etc/opscode' do
   recursive true
   action :create
 end
-
-# create the initial chef-server config file
-template '/etc/opscode/chef-server.rb' do
-  source 'chef-server.rb.erb'
-  owner 'root'
-  group 'root'
-  variables(
-    :chef_servers => node['chef-server']['servers']
-  )
-  action :create
-  notifies :reconfigure, 'chef_server_ingredient[chef-server-core]', :immediately
-end

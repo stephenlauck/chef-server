@@ -1,5 +1,7 @@
 driver:
   name: vagrant
+  ssh:
+    insert_key: false
   customize:
     memory: 1024
     cpus: 2
@@ -28,3 +30,43 @@ suites:
       addons:
         - opscode-manage
 
+- name: tiered-backend
+  run_list:
+  - recipe[test::hostsfile]
+  - recipe[test::setup_ssh_keys]
+  - recipe[chef-server]
+  - recipe[chef-server::addons]
+  driver:
+    vm_hostname: backend.example.com
+    network:
+      - ['private_network', {ip: '33.33.33.12'}]
+  attributes:
+    chef-server:
+      topology: 'tier'
+      api_fqdn: 'frontend.example.com'
+      servers:
+        - 
+          fqdn: backend.example.com
+          ipaddress: 33.33.33.12
+          bootstrap: true
+          role: 'backend'
+        - 
+          fqdn: frontend.example.com
+          ipaddress: 33.33.33.13
+          role: 'frontend'
+
+- name: tiered-frontend
+  run_list:
+  - recipe[test::hostsfile]
+  - recipe[test::replicate_etc_opscode]
+  - recipe[chef-server::frontend]
+  - recipe[chef-server::addons]
+  - recipe[test::user_and_org]
+  driver:
+    vm_hostname: frontend.example.com
+    network:
+      - ['private_network', {ip: '33.33.33.13'}]
+  attributes:
+    chef-server:
+      addons:
+        - opscode-manage

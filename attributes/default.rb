@@ -25,6 +25,21 @@ default['chef-server']['api_fqdn'] = node['fqdn']
 
 default['chef-server']['addons'] = []
 
+# set Chef server topology 
+# for example standalone or tiered
+default['chef-server']['topology'] = "standalone"
+
+# if topology is tier, list of servers
+# [
+#   {
+#     :fqdn => node['fqdn'],
+#     :ipaddress => node['ipaddress'],
+#     :bootstrap => true,
+#     :role => 'backend'
+#   }
+# ]
+default['chef-server']['servers'] = []
+
 #
 # Chef Server Tunables
 #
