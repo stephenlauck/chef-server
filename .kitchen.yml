@@ -17,6 +17,7 @@ suites:
 - name: standalone
   run_list:
     - recipe[test::hostsfile]
+    - recipe[test::setup_ssh_keys]
     - recipe[chef-server]
     - recipe[chef-server::addons]
     - recipe[test::user_and_org]
@@ -27,8 +28,35 @@ suites:
   attributes:
     chef-server:
       api_fqdn: 'chef.example.com'
+      analytics:
+        fqdn: 'analytics.example.com'
       addons:
         - opscode-manage
+        - opscode-reporting
+        - opscode-push-jobs-server
+      configuration:
+        oc_id:
+          applications:
+            analytics:
+              redirect_uri: 'https://analytics.example.com/'
+        rabbitmq:
+          vip: '33.33.33.10'
+          node_ip_address: '0.0.0.0'
+
+- name: standalone-analytics
+  run_list:
+  - recipe[test::hostsfile]
+  - recipe[test::replicate_opscode_analytics]
+  - recipe[chef-server::analytics]
+  driver:
+    vm_hostname: analytics.example.com
+    network:
+      - ['private_network', {ip: '33.33.33.11'}]
+  attributes:
+    chef-server:
+      api_fqdn: 'chef.example.com'
+      analytics:
+        fqdn: 'analytics.example.com'
 
 - name: tiered-backend
   run_list:
@@ -45,6 +73,11 @@ suites:
     chef-server:
       topology: 'tier'
       api_fqdn: 'frontend.example.com'
+      analytics:
+        fqdn: 'tiered-analytics.example.com'
+      addons:
+        - opscode-reporting
+        - opscode-push-jobs-server
       servers:
         - 
           fqdn: backend.example.com
@@ -68,5 +101,35 @@ suites:
       - ['private_network', {ip: '33.33.33.13'}]
   attributes:
     chef-server:
+      analytics:
+        fqdn: 'tiered-analytics.example.com'
       addons:
         - opscode-manage
+        - opscode-reporting
+        - opscode-push-jobs-server
+
+- name: tiered-analytics
+  run_list:
+  - recipe[test::hostsfile]
+  - recipe[test::replicate_opscode_analytics]
+  - recipe[chef-server::analytics]
+  driver:
+    vm_hostname: tiered-analytics.example.com
+    network:
+      - ['private_network', {ip: '33.33.33.14'}]
+  attributes:
+    chef-server:
+      topology: 'tier'
+      api_fqdn: 'frontend.example.com'
+      analytics:
+        fqdn: 'tiered-analytics.example.com'
+      servers:
+        - 
+          fqdn: backend.example.com
+          ipaddress: 33.33.33.12
+          bootstrap: true
+          role: 'backend'
+        - 
+          fqdn: frontend.example.com
+          ipaddress: 33.33.33.13
+          role: 'frontend'
