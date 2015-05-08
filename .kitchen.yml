@@ -3,7 +3,7 @@ driver:
   ssh:
     insert_key: false
   customize:
-    memory: 1024
+    memory: 2048
     cpus: 2
 
 provisioner:
@@ -36,6 +36,7 @@ suites:
   - recipe[test::setup_ssh_keys]
   - recipe[chef-server]
   - recipe[chef-server::addons]
+  - recipe[test::user_and_org]
   driver:
     vm_hostname: backend.example.com
     network:
@@ -61,7 +62,6 @@ suites:
   - recipe[test::replicate_etc_opscode]
   - recipe[chef-server::frontend]
   - recipe[chef-server::addons]
-  - recipe[test::user_and_org]
   driver:
     vm_hostname: frontend.example.com
     network:
