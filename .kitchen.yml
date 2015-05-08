@@ -119,17 +119,6 @@ suites:
       - ['private_network', {ip: '33.33.33.14'}]
   attributes:
     chef-server:
-      topology: 'tier'
       api_fqdn: 'frontend.example.com'
       analytics:
         fqdn: 'tiered-analytics.example.com'
-      servers:
-        - 
-          fqdn: backend.example.com
-          ipaddress: 33.33.33.12
-          bootstrap: true
-          role: 'backend'
-        - 
-          fqdn: frontend.example.com
-          ipaddress: 33.33.33.13
-          role: 'frontend'
