@@ -1,5 +1,5 @@
 hostsfile_entry '33.33.33.10' do
-  hostname  node['chef-server']['api_fqdn']
+  hostname  'chef.example.com'
   unique    true
 end
 

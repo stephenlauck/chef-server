@@ -2,7 +2,7 @@
 
 analytics_fqdn "<%= node['chef-server']['analytics']['fqdn'] %>"
 
-topology "<%= node['chef-server']['topology'] %>"
+topology "standalone"
 
 <% node['chef-server']['configuration'].each_pair do |component, tunables| -%>
 <% case tunables -%>
