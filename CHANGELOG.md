@@ -1,5 +1,20 @@
-chef-server cookbook README
-==========================
+chef-server cookbook CHANGELOG
+==============================
+This file is used to list changes made in each version of the chef-server cookbook.
+
+v4.1.0 (2015-08-31)
+-------------------
+
+- [#105](https://github.com/chef-cookbooks/chef-server): Move `fqdn_resolves` method to chef-ingredient cookbook.
+
+v4.0.0 (2015-06-30)
+-------------------
+
+**Major version update, breaking changes ahead**
+
+- #84: Add ability to set the package source with an attribute for local package installation
+- #90: **Breaking** Use [chef-ingredient cookbook](https://supermarket.chef.io/cookbooks/chef-ingredient). The breaking change is that of the configuration file. Users who are modifying the configuration with the `node['chef-server']['configuration']` attribute as a hash will need to convert it to a string. See the README for more detail.
+- #93: Add a `topology` attribute. Finally you can use this cookbook for non-standalone installs.
 
 v3.1.1 (2015-04-09)
 -------------------
@@ -23,7 +38,7 @@ v3.0.0 (2015-02-24)
 
 **Major Version Update**
 
-Version 3.0.0 supports Chef Server 12. For background and rationale, see [the mailing list post](http://lists.opscode.com/sympa/arc/chef/2015-02/msg00351.html). Changes are from commit [0f2d123](https://github.com/opscode-cookbooks/chef-server/commit/0f2d123ad9ebb40ac18fdabdeee2d66735604bbe).
+Version 3.0.0 supports Chef Server 12. For background and rationale, see [the mailing list post](http://lists.opscode.com/sympa/arc/chef/2015-02/msg00351.html). Changes are from commit [0f2d123](https://github.com/chef-cookbooks/chef-server/commit/0f2d123ad9ebb40ac18fdabdeee2d66735604bbe).
 
 * Remove the omnitruck API client library and related attributes
 * Use packagecloud repository for packages through the `chef_server_ingredient` resource

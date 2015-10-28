@@ -1,19 +1,16 @@
 
-module ChefServerCoobook
+module ChefServerCookbook
   module Helpers
-    def api_fqdn_node_attr
+    def api_fqdn_available?
       return false if node['chef-server'].nil?
       return false if node['chef-server']['api_fqdn'].nil?
-      return false if node['chef-server']['api_fqdn'].empty?
-      true
+      !node['chef-server']['api_fqdn'].empty?
     end
 
-    def api_fqdn_resolves
-      require 'resolv'
-      Resolv.getaddress(node['chef-server']['api_fqdn'])
-      return true
-    rescue
-      false
+    def api_fqdn_resolves?
+      ChefIngredientCookbook::Helpers.fqdn_resolves?(
+        node['chef-server']['api_fqdn']
+      )
     end
 
     def repair_api_fqdn
